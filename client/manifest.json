@@ -1,9 +1,22 @@
 {
-  "name": "magnolia",
-  "description": "a lightweight chrome extension that helps shoppers make smarter decisions about their clothes",
-  "version": "1.0",
-  "manifest_version": 3,
-  "action": {
-    "default_popup": "index.html"
-  }
+    "name": "magnolia",
+    "description": "a lightweight chrome extension that helps shoppers make smarter decisions about their clothes",
+    "background": {
+        "service_worker": "background.js"
+    },
+    "version": "1.0",
+    "manifest_version": 3,
+    "action": {
+        "default_popup": "popup/popup.html"
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "<all_urls>"
+            ],
+            "js": [
+                "content.js"
+            ]
+        }
+    ]
 }

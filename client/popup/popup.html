@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Magnolia</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <div class="card">
+
+      <!-- Tabs -->
+      <div class="tabs">
+        <button id="tab-materials" class="tab active">
+          <span class="tab-icon">🧵</span>
+          <span>Materials</span>
+        </button>
+        <button id="tab-reviews" class="tab">
+          <span class="tab-icon">⭐</span>
+          <span>Reviews</span>
+        </button>
+      </div>
+
+      <!-- MATERIALS VIEW -->
+      <section id="view-materials" class="view active">
+        <h2 class="section-title">What's in this?</h2>
+
+        <div class="progress-bar">
+          <div class="progress-segment seg-1"></div>
+          <div class="progress-segment seg-2"></div>
+          <div class="progress-segment seg-3"></div>
+        </div>
+
+        <ul id="materials-list" class="pill-list">
+          <!-- Filled by JS -->
+        </ul>
+
+        <h3 class="subheading">At a glance</h3>
+
+        <div class="info-card">
+          <div class="info-header">
+            <span class="info-icon">🌍</span>
+            <div>
+              <div class="info-title">Environmental footprint</div>
+              <div class="info-chip chip-medium">Medium</div>
+            </div>
+          </div>
+          <p class="info-text">
+            Medium footprint — mix of natural and synthetic fibers.
+          </p>
+        </div>
+
+        <div class="info-card">
+          <div class="info-header">
+            <span class="info-icon">👕</span>
+            <div>
+              <div class="info-title">Garment lifespan</div>
+              <div class="info-chip chip-fair">Fair</div>
+            </div>
+          </div>
+          <p class="info-text">
+            Elastane may cause stretching over repeated washes.
+          </p>
+        </div>
+      </section>
+
+      <!-- REVIEWS VIEW -->
+      <section id="view-reviews" class="view">
+        <div class="rating-box">
+          <div class="stars" id="stars">★★★★★</div>
+          <div class="rating-text">
+            <div id="rating-score">4.3/5</div>
+            <div id="rating-count">1,247 reviews</div>
+          </div>
+        </div>
+
+        <h3 class="subheading">At a glance</h3>
+
+        <div id="review-bars" class="metric-list">
+          <!-- Filled by JS -->
+        </div>
+
+        <h3 class="subheading">Watch out for</h3>
+
+        <div id="review-flags" class="flag-grid">
+          <!-- Filled by JS -->
+        </div>
+      </section>
+    </div>
+
+    <script src="popup.js"></script>
+  </body>
+</html>

@@ -1,0 +1,290 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+    sans-serif;
+}
+
+body {
+  background: #f4f6fb;
+  padding: 12px;
+}
+
+.card {
+  width: 320px;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 14px 14px 18px;
+  box-shadow: 0 12px 30px rgba(15, 35, 95, 0.15);
+}
+
+/* Tabs */
+
+.tabs {
+  display: flex;
+  background: #f2f4fb;
+  padding: 4px;
+  border-radius: 999px;
+  margin-bottom: 14px;
+}
+
+.tab {
+  flex: 1;
+  border: none;
+  background: transparent;
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  color: #6b7280;
+}
+
+.tab-icon {
+  font-size: 14px;
+}
+
+.tab.active {
+  background: #ffffff;
+  box-shadow: 0 4px 10px rgba(15, 35, 95, 0.12);
+  color: #111827;
+}
+
+/* Views */
+
+.view {
+  display: none;
+}
+
+.view.active {
+  display: block;
+}
+
+.section-title {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+/* Materials progress bar */
+
+.progress-bar {
+  display: flex;
+  height: 6px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: #e5e7eb;
+  margin-bottom: 12px;
+}
+
+.progress-segment {
+  height: 100%;
+}
+
+.seg-1 {
+  flex-basis: 65%;
+  background: #4ade80;
+}
+.seg-2 {
+  flex-basis: 30%;
+  background: #93c5fd;
+}
+.seg-3 {
+  flex-basis: 5%;
+  background: #f9a8d4;
+}
+
+/* Pills list */
+
+.pill-list {
+  list-style: none;
+  margin-bottom: 16px;
+}
+
+.pill-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #f9fafb;
+  margin-bottom: 6px;
+  font-size: 13px;
+}
+
+.pill-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pill-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+}
+
+.dot-green {
+  background: #4ade80;
+}
+.dot-blue {
+  background: #93c5fd;
+}
+.dot-pink {
+  background: #f9a8d4;
+}
+
+.pill-label {
+  font-weight: 500;
+}
+
+/* Info cards */
+
+.subheading {
+  font-size: 13px;
+  font-weight: 600;
+  color: #4b5563;
+  margin: 10px 0 6px;
+}
+
+.info-card {
+  background: #f9fafb;
+  border-radius: 12px;
+  padding: 10px;
+  margin-bottom: 8px;
+}
+
+.info-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.info-icon {
+  font-size: 18px;
+  margin-right: 6px;
+}
+
+.info-title {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.info-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.chip-medium {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.chip-fair {
+  background: #e0f2fe;
+  color: #0f172a;
+}
+
+.info-text {
+  font-size: 12px;
+  color: #4b5563;
+}
+
+/* Reviews view */
+
+.rating-box {
+  background: #fefce8;
+  border-radius: 12px;
+  padding: 10px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.stars {
+  font-size: 18px;
+  color: #f59e0b;
+}
+
+.rating-text {
+  font-size: 12px;
+  color: #374151;
+}
+
+.rating-text div:first-child {
+  font-weight: 600;
+}
+
+/* Review metrics */
+
+.metric-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.metric-row {
+  font-size: 12px;
+}
+
+.metric-top {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2px;
+}
+
+.metric-bar {
+  height: 5px;
+  border-radius: 999px;
+  background: #e5e7eb;
+  overflow: hidden;
+}
+
+.metric-bar-inner {
+  height: 100%;
+  background: #22c55e;
+}
+
+/* Flags */
+
+.flag-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.flag-card {
+  border-radius: 10px;
+  padding: 8px;
+  font-size: 11px;
+}
+
+.flag-title {
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.flag-note {
+  color: #6b7280;
+}
+
+/* Flag colors */
+.flag-warn {
+  background: #fff7ed;
+  color: #9a3412;
+}
+.flag-safe {
+  background: #ecfdf3;
+  color: #166534;
+}
