@@ -1,0 +1,27 @@
+{
+  "name": "magnolia",
+  "version": "1.0.0",
+  "description": "a lightweight chrome extension that helps shoppers make smarter decisions about their clothes",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev:server": "cd server && nodemon src/index.js",
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hailenwashere/magnolia.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hailenwashere/magnolia/issues"
+  },
+  "homepage": "https://github.com/hailenwashere/magnolia#readme",
+  "devDependencies": {
+    "concurrently": "^9.2.1",
+    "nodemon": "^3.1.11",
+    "serve": "^14.2.5"
+  }
+}
