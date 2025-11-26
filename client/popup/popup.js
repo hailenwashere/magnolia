@@ -1,102 +1,133 @@
-function modifyInput(materialsText) {
-    // Simple function to clean up and format the materials text
-    if (!materialsText) return "";
-    return materialsText.replace(/\s+/g, ' ').trim();
-}
+// function modifyInput(materialsText) {
+//   // Simple function to clean up and format the materials text
+//   if (!materialsText) return "";
+//   return materialsText.replace(/\s+/g, ' ').trim();
+// }
 
-// Simple toggling between the two views
-function showView(id) {
+// === View Switching ===
+function showView(viewId) {
   document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
+  document.getElementById(viewId).classList.add("active");
 
   document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
-  if (id === "view-materials") {
-    document.getElementById("tab-materials").classList.add("active");
+  if (viewId === "view-fiber") {
+    document.getElementById("tab-fiber").classList.add("active");
   } else {
     document.getElementById("tab-reviews").classList.add("active");
   }
 }
 
-// Example data – replace with scraped values
-const materialsData = [
-  { name: "Organic Cotton", percent: 65, dotClass: "dot-green" },
-  { name: "Recycled Polyester", percent: 30, dotClass: "dot-blue" },
-  { name: "Elastane", percent: 5, dotClass: "dot-pink" }
-];
+// === Hover Note Logic ===
+function clamp(v, min, max) {
+  return Math.min(Math.max(v, min), max);
+}
 
+function attachHoverNotes() {
+  const noteBox = document.getElementById("hover-note");
+  const noteTitle = document.getElementById("hover-note-title");
+  const noteBody = document.getElementById("hover-note-body");
+
+  const hoverables = document.querySelectorAll(".has-note");
+
+  hoverables.forEach(el => {
+    el.addEventListener("mouseenter", () => {
+      // Update text first so width/height are accurate
+      noteTitle.textContent = el.dataset.noteTitle || "";
+      noteBody.textContent = el.dataset.noteBody || "";
+
+      const rect = el.getBoundingClientRect();
+      const popupWidth = window.innerWidth;
+      const popupHeight = window.innerHeight;
+
+      // Use actual tooltip size (fallback to defaults if 0)
+      const noteWidth = noteBox.offsetWidth || 260;
+      const noteHeight = noteBox.offsetHeight || 120;
+
+      // Center over element horizontally, above it vertically
+      let left = rect.left + rect.width / 2 - noteWidth / 2;
+      let top = rect.top - noteHeight - 12;
+
+      // Clamp so we stay inside the popup window
+      left = clamp(left, 8, popupWidth - noteWidth - 8);
+      top = clamp(top, 8, popupHeight - noteHeight - 8);
+
+      noteBox.style.left = left + "px";
+      noteBox.style.top = top + "px";
+
+      noteBox.classList.add("visible");
+    });
+
+    el.addEventListener("mouseleave", () => {
+      noteBox.classList.remove("visible");
+    });
+  });
+}
+
+
+// === Reviews Rendering ===
 const reviewMetrics = [
-  { name: "Fit", value: 87 },
-  { name: "Quality", value: 78 },
-  { name: "Comfort", value: 92 },
-  { name: "Value", value: 64 }
+  { name: "Fit", emoji: "👕", value: 87 },
+  { name: "Quality", emoji: "💎", value: 78 },
+  { name: "Comfort", emoji: "✨", value: 92 },
+  { name: "Value", emoji: "💰", value: 64 }
 ];
 
 const reviewFlags = [
   { name: "Pilling", note: "12% mention", type: "warn" },
-  { name: "Shrinkage", note: "3% mention", type: "safe" },
-  { name: "Transparency", note: "5% mention", type: "safe" },
+  { name: "Shrinkage", note: "3% mention", type: "soft" },
+  { name: "Transparency", note: "5% mention", type: "soft" },
   { name: "Seam issues", note: "8% mention", type: "warn" }
 ];
 
-function renderMaterials() {
-  const list = document.getElementById("materials-list");
-  list.innerHTML = "";
-
-  materialsData.forEach(m => {
-    const li = document.createElement("li");
-    li.className = "pill-row";
-    li.innerHTML = `
-      <div class="pill-left">
-        <span class="pill-dot ${m.dotClass}"></span>
-        <span class="pill-label">${m.name}</span>
-      </div>
-      <span>${m.percent}%</span>
-    `;
-    list.appendChild(li);
-  });
-}
-
 function renderReviews() {
-  const metricsContainer = document.getElementById("review-bars");
-  metricsContainer.innerHTML = "";
-  reviewMetrics.forEach(m => {
-    const row = document.createElement("div");
-    row.className = "metric-row";
-    row.innerHTML = `
-      <div class="metric-top">
-        <span>${m.name}</span>
-        <span>${m.value}%</span>
-      </div>
-      <div class="metric-bar">
-        <div class="metric-bar-inner" style="width: ${m.value}%;"></div>
-      </div>
-    `;
-    metricsContainer.appendChild(row);
-  });
-
+  const metricsContainer = document.getElementById("review-metrics");
   const flagsContainer = document.getElementById("review-flags");
-  flagsContainer.innerHTML = "";
-  reviewFlags.forEach(f => {
-    const card = document.createElement("div");
-    card.className = `flag-card flag-${f.type}`;
-    card.innerHTML = `
-      <div class="flag-title">${f.name}</div>
-      <div class="flag-note">${f.note}</div>
-    `;
-    flagsContainer.appendChild(card);
-  });
+
+  if (metricsContainer) {
+    metricsContainer.innerHTML = "";
+    reviewMetrics.forEach(m => {
+      const row = document.createElement("div");
+      row.className = "metric-row";
+      row.innerHTML = `
+        <div class="metric-top">
+          <span class="metric-name">
+            <span class="metric-emoji">${m.emoji}</span>
+            <span>${m.name}</span>
+          </span>
+          <span>${m.value}%</span>
+        </div>
+        <div class="metric-bar">
+          <div class="metric-bar-inner" style="width: ${m.value}%;"></div>
+        </div>
+      `;
+      metricsContainer.appendChild(row);
+    });
+  }
+
+  if (flagsContainer) {
+    flagsContainer.innerHTML = "";
+    reviewFlags.forEach(f => {
+      const card = document.createElement("div");
+      card.className = `flag-card flag-${f.type}`;
+      card.innerHTML = `
+        <div class="flag-title">${f.name}</div>
+        <div class="flag-note">${f.note}</div>
+      `;
+      flagsContainer.appendChild(card);
+    });
+  }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  // Tab wiring
+  // Tabs
   document
-    .getElementById("tab-materials")
-    .addEventListener("click", () => showView("view-materials"));
+    .getElementById("tab-fiber")
+    .addEventListener("click", () => showView("view-fiber"));
   document
     .getElementById("tab-reviews")
     .addEventListener("click", () => showView("view-reviews"));
 
-  renderMaterials();
+  attachHoverNotes();
   renderReviews();
 });
 

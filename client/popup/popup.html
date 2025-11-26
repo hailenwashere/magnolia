@@ -1,92 +1,145 @@
 <!DOCTYPE html>
 <html>
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <title>Magnolia</title>
     <link rel="stylesheet" href="popup.css" />
-  </head>
-  <body>
-    <div class="card">
+</head>
 
-      <!-- Tabs -->
-      <div class="tabs">
-        <button id="tab-materials" class="tab active">
-          <span class="tab-icon">🧵</span>
-          <span>Materials</span>
-        </button>
-        <button id="tab-reviews" class="tab">
-          <span class="tab-icon">⭐</span>
-          <span>Reviews</span>
-        </button>
-      </div>
+<body>
+    <div class="shell">
+        <div class="card">
 
-      <!-- MATERIALS VIEW -->
-      <section id="view-materials" class="view active">
-        <h2 class="section-title">What's in this?</h2>
+            <!-- Brand header -->
+            <header class="brand">
+                <div class="brand-logo">✿</div>
+                <div class="brand-name">Magnolia</div>
+            </header>
 
-        <div class="progress-bar">
-          <div class="progress-segment seg-1"></div>
-          <div class="progress-segment seg-2"></div>
-          <div class="progress-segment seg-3"></div>
-        </div>
-
-        <ul id="materials-list" class="pill-list">
-          <!-- Filled by JS -->
-        </ul>
-
-        <h3 class="subheading">At a glance</h3>
-
-        <div class="info-card">
-          <div class="info-header">
-            <span class="info-icon">🌍</span>
-            <div>
-              <div class="info-title">Environmental footprint</div>
-              <div class="info-chip chip-medium">Medium</div>
+            <!-- Tabs -->
+            <div class="tabs">
+                <button id="tab-fiber" class="tab active">Fiber Composition</button>
+                <button id="tab-reviews" class="tab">Reviews</button>
             </div>
-          </div>
-          <p class="info-text">
-            Medium footprint — mix of natural and synthetic fibers.
-          </p>
+
+            <!-- ===== FIBER VIEW ===== -->
+            <section id="view-fiber" class="view active">
+                <!-- Composition -->
+                <h2 class="section-title">Fiber Composition</h2>
+
+                <div class="composition-wrapper">
+                    <div class="composition-bar">
+                        <div class="seg seg-1" style="width: 62%"></div>
+                        <div class="seg seg-2" style="width: 29%"></div>
+                        <div class="seg seg-3" style="width: 9%"></div>
+                    </div>
+
+                    <div class="composition-legend">
+                        <div class="legend-item has-note" data-note-title="Cotton"
+                            data-note-body="A natural, plant-derived fiber used for comfort, softness, and breathability. Biodegradable, but water- and pesticide-intensive to grow.">
+                            <span class="legend-dot dot-1"></span>
+                            <span class="legend-label">Cotton</span>
+                            <span class="legend-percent">62%</span>
+                        </div>
+
+                        <div class="legend-item has-note" data-note-title="Recycled Polyester"
+                            data-note-body="Synthetic fiber made from recycled plastics. Reduces waste and energy use vs. virgin polyester, but still sheds microplastics.">
+                            <span class="legend-dot dot-2"></span>
+                            <span class="legend-label">Recycled Polyester</span>
+                            <span class="legend-percent">29%</span>
+                        </div>
+
+                        <div class="legend-item has-note" data-note-title="Rayon"
+                            data-note-body="Semi-synthetic fiber made from cellulose. Soft and drapey, but can involve chemically intensive production.">
+                            <span class="legend-dot dot-3"></span>
+                            <span class="legend-label">Rayon</span>
+                            <span class="legend-percent">9%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lifespan -->
+                <div class="lifespan-card has-note" data-note-title="Expected lifespan"
+                    data-note-body="Blended natural and synthetic fibers typically last 3–5 years with moderate wear and proper care.">
+                    <div class="lifespan-header">
+                        <div class="lifespan-icon">⏱</div>
+                        <div class="lifespan-text">
+                            <div class="lifespan-label">Expected lifespan</div>
+                            <div class="lifespan-years">3–5 years</div>
+                        </div>
+                        <span class="lifespan-pill">Long lasting</span>
+                    </div>
+                </div>
+
+                <!-- Care guide -->
+                <div class="care-card">
+                    <div class="care-title">Care guide</div>
+                    <div class="care-row">
+                        <div class="care-item has-note" data-note-title="Cold wash"
+                            data-note-body="Best choice — preserves energy and helps prevent shrinking or color fading.">
+                            <div class="care-icon cold">💧</div>
+                            <div class="care-label">Cold</div>
+                        </div>
+
+                        <div class="care-item has-note" data-note-title="Tumble low"
+                            data-note-body="Use a low-heat tumble to protect fibers and reduce pilling.">
+                            <div class="care-icon air">🌬</div>
+                            <div class="care-label">Low</div>
+                        </div>
+
+                        <div class="care-item has-note" data-note-title="Iron low"
+                            data-note-body="Use low heat if needed. High temperatures can damage synthetic fibers.">
+                            <div class="care-icon heat">🔥</div>
+                            <div class="care-label">Low</div>
+                        </div>
+
+                        <div class="care-item has-note" data-note-title="Recyclable"
+                            data-note-body="Check local textile recycling options when the garment reaches the end of its life.">
+                            <div class="care-icon recycle">♻️</div>
+                            <div class="care-label">Yes</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== REVIEWS VIEW (stub) ===== -->
+            <section id="view-reviews" class="view">
+                <h2 class="section-title">Reviews</h2>
+
+                <!-- Top rating card -->
+                <div class="reviews-card rating-card">
+                    <div class="rating-stars">★★★★☆</div>
+                    <div class="rating-info">
+                        <div class="rating-score">4.3/5</div>
+                        <div class="rating-count">1,247 reviews</div>
+                    </div>
+                </div>
+
+                <!-- At a glance metrics -->
+                <div class="reviews-subtitle">At a glance</div>
+                <div id="review-metrics" class="metric-list">
+                    <!-- filled by JS -->
+                </div>
+
+                <!-- Watch out for -->
+                <div class="reviews-subtitle">Watch out for</div>
+                <div id="review-flags" class="flag-grid">
+                    <!-- filled by JS -->
+                </div>
+            </section>
         </div>
+    </div>
 
-        <div class="info-card">
-          <div class="info-header">
-            <span class="info-icon">👕</span>
-            <div>
-              <div class="info-title">Garment lifespan</div>
-              <div class="info-chip chip-fair">Fair</div>
-            </div>
-          </div>
-          <p class="info-text">
-            Elastane may cause stretching over repeated washes.
-          </p>
+    <!-- Hover note panel -->
+    <div id="hover-note" class="hover-note">
+        <div id="hover-note-title" class="hover-note-title">Hover for details</div>
+        <div id="hover-note-body" class="hover-note-body">
+            Move your cursor over a fiber or care icon to see more info.
         </div>
-      </section>
-
-      <!-- REVIEWS VIEW -->
-      <section id="view-reviews" class="view">
-        <div class="rating-box">
-          <div class="stars" id="stars">★★★★★</div>
-          <div class="rating-text">
-            <div id="rating-score">4.3/5</div>
-            <div id="rating-count">1,247 reviews</div>
-          </div>
-        </div>
-
-        <h3 class="subheading">At a glance</h3>
-
-        <div id="review-bars" class="metric-list">
-          <!-- Filled by JS -->
-        </div>
-
-        <h3 class="subheading">Watch out for</h3>
-
-        <div id="review-flags" class="flag-grid">
-          <!-- Filled by JS -->
-        </div>
-      </section>
     </div>
 
     <script src="popup.js"></script>
-  </body>
+</body>
+
 </html>
