@@ -6,6 +6,9 @@
     },
     "version": "1.0",
     "manifest_version": 3,
+    "permissions": [
+        "tabs"
+    ],
     "action": {
         "default_popup": "popup/popup.html"
     },
@@ -18,5 +21,8 @@
                 "content.js"
             ]
         }
+    ],
+    "host_permissions": [
+        "https://xnkivxntmdbexvjzqtyn.supabase.co/*"
     ]
 }

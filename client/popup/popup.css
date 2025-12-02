@@ -14,16 +14,15 @@ body {
 
 /* Center card in popup */
 .shell {
-  min-width: 360px;
-  min-height: 480px;
+  min-width: 420px;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 12px;
+  padding: 16px;
 }
 
 .card {
-  width: 340px;
+  width: 400px;
   background: linear-gradient(135deg, #ffffffef, #f9f5ffef);
   border-radius: 24px;
   padding: 18px 18px 20px;
@@ -138,6 +137,14 @@ body {
   background: #b26bff;
 }
 
+.seg-4 {
+  background: #fecb95;
+}
+
+.seg-5 {
+  background: #9ff4cb;
+}
+
 .composition-legend {
   display: flex;
   justify-content: space-around;
@@ -168,6 +175,14 @@ body {
 
 .dot-3 {
   background: #b26bff;
+}
+
+.dot-4 {
+  background: #fecb95;
+}
+
+.dot-5 {
+  background: #9ff4cb;
 }
 
 .legend-label {
@@ -275,22 +290,22 @@ body {
   margin-bottom: 2px;
 }
 
-.care-icon.cold {
+.care-icon.blue {
   background: #e0f2ff;
   color: #0ea5e9;
 }
 
-.care-icon.air {
+.care-icon.red {
   background: #fee2f2;
   color: #f97316;
 }
 
-.care-icon.heat {
+.care-icon.yellow {
   background: #ffedd5;
   color: #ea580c;
 }
 
-.care-icon.recycle {
+.care-icon.green {
   background: #dcfce7;
   color: #16a34a;
 }
@@ -309,7 +324,7 @@ body {
 
   min-width: 260px;
   max-width: 300px;
-  max-height: 100px;        /* cap vertical size */
+  max-height: 120px;        /* cap vertical size */
   overflow-y: auto;         /* allow scrolling instead of expanding */
   word-wrap: break-word;    /* prevent long words from ruining layout */
 
