@@ -29,6 +29,10 @@ async function fetchMaterialNotes(materials) {
 
     const data = await response.json();
     console.log(`BACKGROUND: Notes data for ${name}:`, data);
+    if (data.length === 0) {
+      continue;
+    }
+
     notes[name] = {
       environmental_impact_desc: data[0]?.environmental_impact_desc || null,
       durability_desc: data[0]?.durability_desc || null
@@ -63,12 +67,15 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             sendResponse({ materials: null, error: chrome.runtime.lastError.message });
             return;
           }
-
+          
+          const notes = await fetchMaterialNotes(response.materials);
+          const filteredMaterials = response.materials.filter(m => notes[m.name]);
           sendResponse({
-            materials: response.materials,
-            notes: await fetchMaterialNotes(response.materials)
+            materials: filteredMaterials,
+            notes: notes
           });
-          materials = response.materials;
+          materials = filteredMaterials;
+          console.log("BACKGROUND: Cached materials:", materials);
         }
       );
     });

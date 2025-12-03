@@ -201,7 +201,10 @@ const careIconMap = {
   dry: "🌬️",
   avoid: "❌",
   recycle: "♻️",
-  recommend: "👍"
+  recommend: "👍",
+  okay: "🤔",
+  discouraged: "⚠️",
+  unrecyclable: "🚫"
 };
 
 function updateCareInstructions(careInstructions, materials) {
