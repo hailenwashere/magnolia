@@ -25,8 +25,8 @@ To run the server, make sure all packages are installed with `npm i` and start t
 npm i
 npm run start
 ``` -->
-
+<!-- 
 Going to http://localhost:3001/api/health in your browser should show something like this: 
 ```
 {"status":"ok","time":"2025-11-25T02:50:35.288Z"}
-```
+``` -->
