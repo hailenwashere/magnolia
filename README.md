@@ -13,7 +13,7 @@ Clicking on the extension icon for magnolia will popup the extension, which show
 
 Disclaimer: As of right now, the extension is populated with static dummy data that simulates what would pop up on a listing of choice. The data does not accurately represent the active tab, but will by the end of week 9.
 
-### Server
+<!-- ### Server
 Make sure you can copy paste the connection URL from supabase. You can hit Connect at the top, copy the connection URL, replace `YOUR_PASSWORD` in the URL with the database password, and paste it into `/server/.env`. Your .env file should look something like this:
 ```
 DATABASE_URL=[YOUR URL]
@@ -24,7 +24,7 @@ To run the server, make sure all packages are installed with `npm i` and start t
 ```bash
 npm i
 npm run start
-```
+``` -->
 
 Going to http://localhost:3001/api/health in your browser should show something like this: 
 ```

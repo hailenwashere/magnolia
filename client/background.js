@@ -67,7 +67,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             sendResponse({ materials: null, error: chrome.runtime.lastError.message });
             return;
           }
-          
+
           const notes = await fetchMaterialNotes(response.materials);
           const filteredMaterials = response.materials.filter(m => notes[m.name]);
           sendResponse({
@@ -215,8 +215,29 @@ async function fetchBrandInfo(domainName) {
 
   const data = await response.json();
   console.log(`BACKGROUND: Brand info data for ${domainName}:`, data);
+
+  // Inside fetchBrandInfo(domain)
   if (data.length === 0) {
-    return null;
+    console.log("Brand not found in DB, generating with OpenAI...");
+
+    const edgeRes = await fetch(
+      `${SUPABASE_URL}/functions/v1/generate-brand-summary`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          apikey: SUPABASE_PUBLISHABLE_KEY,
+        },
+        body: JSON.stringify({
+          domain: domainName,
+        })
+      }
+    );
+
+    const generated = await edgeRes.json();
+    console.log("Generated sustainability summary:", generated);
+
+    return generated;
   }
 
   return {
