@@ -115,3 +115,106 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     return true;
   }
 });
+
+/**
+ * Find the top-level container that likely holds all the reviews.
+ * 1. Prefer elements whose id/class/data-testid mention "review".
+ * 2. If none, fall back to containers that contain many "rating" elements.
+ *
+ * Returns: HTMLElement | null
+ */
+function findReviewContainer() {
+  const all = Array.from(document.querySelectorAll("body *"));
+
+  // --- 1) REVIEW-BASED SEARCH ------------------------------------
+  const reviewCandidates = [];
+
+  for (const el of all) {
+    const id = (el.id || "").toLowerCase();
+    const className = (el.className || "").toString().toLowerCase();
+    const testId =
+      (el.getAttribute("data-testid") ||
+        el.getAttribute("data-test-id") ||
+        "").toLowerCase();
+
+    const attrs = `${id} ${className} ${testId}`;
+
+    if (attrs.includes("review")) {
+      reviewCandidates.push(el);
+    }
+  }
+
+  if (reviewCandidates.length) {
+    // Pick the “topmost” candidate: one that is not contained by any other candidate
+    const topLevel = reviewCandidates.filter(
+      el => !reviewCandidates.some(other => other !== el && other.contains(el))
+    );
+
+    // Heuristic: choose the first top-level; you can add more scoring later
+    if (topLevel.length) {
+      console.log("Review container (review-based):", topLevel[0]);
+      return topLevel[0];
+    }
+  }
+
+  // --- 2) RATING-BASED FALLBACK ---------------------------------
+  // For pages like Uniqlo where only the star row mentions "rating"
+
+  const ratingElems = [];
+
+  for (const el of all) {
+    const id = (el.id || "").toLowerCase();
+    const className = (el.className || "").toString().toLowerCase();
+    const testId =
+      (el.getAttribute("data-testid") ||
+        el.getAttribute("data-test-id") ||
+        "").toLowerCase();
+    const aria = (el.getAttribute("aria-label") || "").toLowerCase();
+    const text = (el.textContent || "").toLowerCase();
+
+    const attrs = `${id} ${className} ${testId} ${aria} ${text}`;
+
+    if (attrs.includes("rating")) {
+      ratingElems.push(el);
+    }
+  }
+
+  if (!ratingElems.length) {
+    console.warn("No review / rating hints found");
+    return null;
+  }
+
+  // For each rating element, walk up to a reasonable container (section/div/ul/ol)
+  // and count how many rating elements land in each. The one with the most
+  // is likely the reviews block.
+  const containerCounts = new Map();
+
+  for (const el of ratingElems) {
+    const container =
+      el.closest("section, ul, ol, div[role='tabpanel'], div[role='dialog'], div");
+
+    if (!container) continue;
+
+    const current = containerCounts.get(container) || 0;
+    containerCounts.set(container, current + 1);
+  }
+
+  let bestContainer = null;
+  let bestScore = 0;
+
+  for (const [container, count] of containerCounts.entries()) {
+    if (count > bestScore) {
+      bestScore = count;
+      bestContainer = container;
+    }
+  }
+
+  if (bestContainer) {
+    console.log("Review container (rating-based):", bestContainer, "score:", bestScore);
+  } else {
+    console.warn("Rating elements found but no suitable container identified");
+  }
+
+  return bestContainer;
+}
+

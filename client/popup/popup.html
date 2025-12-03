@@ -1,117 +1,112 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-    <meta charset="UTF-8" />
-    <title>Magnolia</title>
-    <link rel="stylesheet" href="popup.css" />
+  <meta charset="UTF-8" />
+  <title>Magnolia</title>
+  <link rel="stylesheet" href="popup.css" />
 </head>
 
 <body>
-    <div class="shell">
-        <div class="card">
+  <div class="shell">
+    <div class="card">
+      <!-- Brand header -->
+      <header class="brand">
+        <div class="brand-logo">✿</div>
+        <div class="brand-name">Magnolia</div>
+      </header>
 
-            <!-- Brand header -->
-            <header class="brand">
-                <div class="brand-logo">✿</div>
-                <div class="brand-name">Magnolia</div>
-            </header>
+      <!-- Tabs -->
+      <div class="tabs">
+        <button id="tab-fiber" class="tab active">Fibre Composition</button>
+        <button id="tab-details" class="tab">Details</button>
+      </div>
 
-            <!-- Tabs -->
-            <div class="tabs">
-                <button id="tab-fiber" class="tab active">Fiber Composition</button>
-                <button id="tab-reviews" class="tab">Reviews</button>
+      <!-- ===== FIBER VIEW (unchanged behaviour) ===== -->
+      <section id="view-fiber" class="view active">
+        <h2 class="section-title">Fibre Composition</h2>
+
+        <div class="composition-wrapper">
+          <div class="composition-bar"></div>
+          <div class="composition-legend"></div>
+        </div>
+
+        <!-- Lifespan -->
+        <div class="lifespan-card has-note"
+             data-note-title="Durability score"
+             data-note-body="This score reflects the weighted average durability of the main fibres in this garment.">
+          <div class="lifespan-header">
+            <div class="lifespan-icon">⏱</div>
+            <div class="lifespan-text">
+              <div class="lifespan-info">
+                <div class="lifespan-label">Durability Score (1–5)</div>
+                <div class="lifespan-info-icon">i</div>
+              </div>
+              <div class="lifespan-score"></div>
             </div>
-
-            <!-- ===== FIBER VIEW ===== -->
-            <section id="view-fiber" class="view active">
-                <!-- Composition -->
-                <h2 class="section-title">Fiber Composition</h2>
-
-                <div class="composition-wrapper">
-                    <div class="composition-bar"></div>
-                    <div class="composition-legend"></div>
-                </div>
-
-                <!-- Lifespan -->
-                <div class="lifespan-card">
-                    <div class="lifespan-header">
-                        <div class="lifespan-icon">⏱</div>
-                        <div class="lifespan-text">
-                            <div class="lifespan-info">
-                                <div class="lifespan-label">Durability Score (1-5)</div>
-                                <div class="lifespan-info-icon has-note" data-note-title="Expected durability"
-                                    data-note-body="This score reflects the average durability of the fibers in this garment, weighted by their proportions.">
-                                    i</div>
-                            </div>
-                            <div class="lifespan-score"></div>
-                        </div>
-                        <span class="lifespan-pill"></span>
-                    </div>
-                </div>
-
-                <!-- Care guide -->
-                <div class="care-card">
-                    <div class="care-title">Care guide</div>
-                    <div class="care-row">
-                        <!-- <div class="care-item has-note" data-note-title="Wash"
-                            data-note-body="Best choice — preserves energy and helps prevent shrinking or color fading.">
-                            <div class="care-icon blue">💧</div>
-                            <div class="care-label">Cold</div>
-                        </div>
-
-                        <div class="care-item has-note" data-note-title="Dry"
-                            data-note-body="Use a low-heat tumble to protect fibers and reduce pilling.">
-                            <div class="care-icon yellow">🌬</div>
-                            <div class="care-label">Low</div>
-                        </div>
-
-                        <div class="care-item has-note" data-note-title="Avoid"
-                            data-note-body="Use low heat if needed. High temperatures can damage synthetic fibers.">
-                            <div class="care-icon red">⚠️</div>
-                            <div class="care-label">Low</div>
-                        </div> -->
-                    </div>
-                </div>
-            </section>
-
-            <!-- ===== REVIEWS VIEW (stub) ===== -->
-            <section id="view-reviews" class="view">
-                <h2 class="section-title">Reviews</h2>
-
-                <!-- Top rating card -->
-                <div class="reviews-card rating-card">
-                    <div class="rating-stars">★★★★☆</div>
-                    <div class="rating-info">
-                        <div class="rating-score">4.3/5</div>
-                        <div class="rating-count">1,247 reviews</div>
-                    </div>
-                </div>
-
-                <!-- At a glance metrics -->
-                <div class="reviews-subtitle">At a glance</div>
-                <div id="review-metrics" class="metric-list">
-                    <!-- filled by JS -->
-                </div>
-
-                <!-- Watch out for -->
-                <div class="reviews-subtitle">Watch out for</div>
-                <div id="review-flags" class="flag-grid">
-                    <!-- filled by JS -->
-                </div>
-            </section>
+            <span class="lifespan-pill"></span>
+          </div>
         </div>
-    </div>
 
-    <!-- Hover note panel -->
-    <div id="hover-note" class="hover-note">
-        <div id="hover-note-title" class="hover-note-title">Hover for details</div>
-        <div id="hover-note-body" class="hover-note-body">
-            Move your cursor over a fiber or care icon to see more info.
+        <!-- Care guide -->
+        <div class="care-card">
+          <div class="care-title">Care guide</div>
+          <div class="care-row">
+            <!-- filled by JS -->
+          </div>
         </div>
-    </div>
+      </section>
 
-    <script src="popup.js"></script>
+      <!-- ===== DETAILS VIEW ===== -->
+      <section id="view-details" class="view">
+        <!-- Review summary -->
+        <h2 class="section-title">Review summary</h2>
+        <div class="summary-card">
+          <div class="summary-left">
+            <div id="summary-rating" class="summary-rating">4.3</div>
+            <div id="summary-stars" class="summary-stars">★★★★☆</div>
+            <div id="summary-review-count" class="summary-count">1.2k reviews</div>
+          </div>
+          <ul id="summary-list" class="summary-list">
+            <!-- bullets filled by JS -->
+          </ul>
+        </div>
+
+        <!-- What this means for you -->
+        <h2 class="section-title">What this means for you</h2>
+        <div class="meaning-card">
+          <div class="meaning-row">
+            <div class="meaning-label">Best for</div>
+            <div id="best-for-chips" class="chip-row">
+              <!-- chips filled by JS -->
+            </div>
+          </div>
+          <div class="meaning-row">
+            <div class="meaning-label">Avoid if</div>
+            <div id="avoid-if-chips" class="chip-row">
+              <!-- chips filled by JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Brand sustainability -->
+        <h2 class="section-title">Brand sustainability</h2>
+        <div class="brand-card">
+          <div id="brand-name" class="brand-title">Brand name</div>
+          <p id="brand-sustainability-body" class="brand-body">
+            We’ll summarize the brand’s sustainability initiatives here based on
+            our database or an OpenAI-generated summary.
+          </p>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- Hover note panel (used in fibre view) -->
+  <div id="hover-note" class="hover-note">
+    <div id="hover-note-title" class="hover-note-title"></div>
+    <div id="hover-note-body" class="hover-note-body"></div>
+  </div>
+
+  <script src="popup.js"></script>
 </body>
-
 </html>

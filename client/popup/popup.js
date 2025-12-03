@@ -7,7 +7,7 @@ function showView(viewId) {
   if (viewId === "view-fiber") {
     document.getElementById("tab-fiber").classList.add("active");
   } else {
-    document.getElementById("tab-reviews").classList.add("active");
+    document.getElementById("tab-details").classList.add("active");
   }
 }
 
@@ -20,12 +20,10 @@ function attachHoverNotes() {
   const noteBox = document.getElementById("hover-note");
   const noteTitle = document.getElementById("hover-note-title");
   const noteBody = document.getElementById("hover-note-body");
-
   const hoverables = document.querySelectorAll(".has-note");
 
   hoverables.forEach(el => {
     el.addEventListener("mouseenter", () => {
-      // Update text first so width/height are accurate
       noteTitle.textContent = el.dataset.noteTitle || "";
       noteBody.textContent = el.dataset.noteBody || "";
 
@@ -33,15 +31,12 @@ function attachHoverNotes() {
       const popupWidth = window.innerWidth;
       const popupHeight = window.innerHeight;
 
-      // Use actual tooltip size (fallback to defaults if 0)
       const noteWidth = noteBox.offsetWidth || 260;
       const noteHeight = noteBox.offsetHeight || 120;
 
-      // Center over element horizontally, above it vertically
       let left = rect.left + rect.width / 2 - noteWidth / 2;
       let top = rect.top - noteHeight - 12;
 
-      // Clamp so we stay inside the popup window
       left = clamp(left, 8, popupWidth - noteWidth - 8);
       top = clamp(top, 8, popupHeight - noteHeight - 8);
 
@@ -57,76 +52,94 @@ function attachHoverNotes() {
   });
 }
 
+// ========= DETAILS VIEW RENDERING =========
 
-// === Reviews Rendering ===
-const reviewMetrics = [
-  { name: "Fit", emoji: "👕", value: 87 },
-  { name: "Quality", emoji: "💎", value: 78 },
-  { name: "Comfort", emoji: "✨", value: 92 },
-  { name: "Value", emoji: "💰", value: 64 }
-];
-
-const reviewFlags = [
-  { name: "Pilling", note: "12% mention", type: "warn" },
-  { name: "Shrinkage", note: "3% mention", type: "soft" },
-  { name: "Transparency", note: "5% mention", type: "soft" },
-  { name: "Seam issues", note: "8% mention", type: "warn" }
-];
-
-function renderReviews() {
-  const metricsContainer = document.getElementById("review-metrics");
-  const flagsContainer = document.getElementById("review-flags");
-
-  if (metricsContainer) {
-    metricsContainer.innerHTML = "";
-    reviewMetrics.forEach(m => {
-      const row = document.createElement("div");
-      row.className = "metric-row";
-      row.innerHTML = `
-        <div class="metric-top">
-          <span class="metric-name">
-            <span class="metric-emoji">${m.emoji}</span>
-            <span>${m.name}</span>
-          </span>
-          <span>${m.value}%</span>
-        </div>
-        <div class="metric-bar">
-          <div class="metric-bar-inner" style="width: ${m.value}%;"></div>
-        </div>
-      `;
-      metricsContainer.appendChild(row);
-    });
+// Utility to render ★★★★★ from numeric rating
+function starsForRating(rating) {
+  const full = Math.round(rating); // simple
+  let out = "";
+  for (let i = 0; i < 5; i++) {
+    out += i < full ? "★" : "☆";
   }
-
-  if (flagsContainer) {
-    flagsContainer.innerHTML = "";
-    reviewFlags.forEach(f => {
-      const card = document.createElement("div");
-      card.className = `flag-card flag-${f.type}`;
-      card.innerHTML = `
-        <div class="flag-title">${f.name}</div>
-        <div class="flag-note">${f.note}</div>
-      `;
-      flagsContainer.appendChild(card);
-    });
-  }
+  return out;
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  // Tabs
-  document
-    .getElementById("tab-fiber")
-    .addEventListener("click", () => showView("view-fiber"));
-  document
-    .getElementById("tab-reviews")
-    .addEventListener("click", () => showView("view-reviews"));
+/**
+ * Renders the Details view.
+ * Later, you'll call this with data returned from background/OpenAI.
+ *
+ * details = {
+ *   rating: number,
+ *   reviewCount: number,
+ *   summaryNotes: string[],   // 2–4 bullet points
+ *   bestFor: string[],        // chips
+ *   avoidIf: string[]         // chips
+ * }
+ */
+function renderDetails(details) {
+  const {
+    rating = 4.3,
+    reviewCount = 1200,
+    summaryNotes = [],
+    bestFor = [],
+    avoidIf = []
+  } = details || {};
 
-  attachHoverNotes();
-  renderReviews();
-});
+  const ratingEl = document.getElementById("summary-rating");
+  const starsEl = document.getElementById("summary-stars");
+  const countEl = document.getElementById("summary-review-count");
+  const listEl = document.getElementById("summary-list");
+  const bestRow = document.getElementById("best-for-chips");
+  const avoidRow = document.getElementById("avoid-if-chips");
 
+  if (!ratingEl || !starsEl || !countEl || !listEl || !bestRow || !avoidRow) return;
 
-// === Materials Section  ===
+  ratingEl.textContent = rating.toFixed(1);
+  starsEl.textContent = starsForRating(rating);
+  countEl.textContent =
+    reviewCount >= 1000
+      ? `${(reviewCount / 1000).toFixed(1)}k reviews`
+      : `${reviewCount} reviews`;
+
+  // Summary bullets
+  listEl.innerHTML = "";
+  summaryNotes.forEach(text => {
+    const li = document.createElement("li");
+    li.innerHTML = `<span class="summary-bullet">✓</span><span>${text}</span>`;
+    listEl.appendChild(li);
+  });
+
+  // Helper for chip rows
+  function fillChips(container, items) {
+    container.innerHTML = "";
+    items.forEach(label => {
+      const chip = document.createElement("div");
+      chip.className = "chip";
+      chip.textContent = label;
+      container.appendChild(chip);
+    });
+  }
+
+  fillChips(bestRow, bestFor);
+  fillChips(avoidRow, avoidIf);
+}
+
+// Demo placeholder so the UI looks like your mock until backend is wired
+const demoDetailsData = {
+  rating: 4.3,
+  reviewCount: 1200,
+  summaryNotes: [
+    "Super comfortable for all-day wear",
+    "True to size with flattering fit",
+    "Some reports of pilling",
+    "Might wrinkle easily"
+  ],
+  bestFor: ["Daily wear", "Travel", "Layering"],
+  avoidIf: ["Low-maintenance needed", "Wrinkle-free required"]
+};
+
+// ========= MATERIALS SECTION (existing logic) =========
+
 function getMajorityFiber(materials) {
   if (!materials || !materials.length) return null;
 
@@ -137,11 +150,9 @@ function getMajorityFiber(materials) {
     }
   }
   return majority.name;
-} 
+}
 
-const plantIcons = [
-  "🌿", "🍃", "🌱", "🌾", "🍀"
-]
+const plantIcons = ["🌿", "🍃", "🌱", "🌾", "🍀"];
 
 // == Materials Bar Rendering ==
 function updateFiberFromMaterials(materials, notes) {
@@ -151,28 +162,24 @@ function updateFiberFromMaterials(materials, notes) {
     return;
   }
 
-  // Clear existing static markup
   bar.innerHTML = "";
   legend.innerHTML = "";
 
-  const maxSegments = 5; // you have seg-1..5 and dot-1..5 styled in CSS
+  const maxSegments = 5;
   materials.slice(0, maxSegments).forEach((mat, index) => {
     const segIndex = index + 1;
 
-    // Bar segment
     const seg = document.createElement("div");
     seg.className = `seg seg-${segIndex}`;
     seg.style.width = `${mat.percent}%`;
     bar.appendChild(seg);
 
-    // Legend item
     const item = document.createElement("div");
     item.className = "legend-item has-note";
 
-
     const materialName = mat.name.replace(/\b\w/g, char => char.toUpperCase());
-    item.dataset.noteTitle = `${plantIcons[index]} ` + materialName
-    item.dataset.noteBody = notes[mat.name]
+    item.dataset.noteTitle = `${plantIcons[index]} ${materialName}`;
+    item.dataset.noteBody = notes && notes[mat.name]
       ? notes[mat.name].environmental_impact_desc
       : `${mat.percent}% ${materialName}`;
 
@@ -185,17 +192,16 @@ function updateFiberFromMaterials(materials, notes) {
     legend.appendChild(item);
   });
 
-  // Re-wire hover listeners for the new .has-note elements
   attachHoverNotes();
 }
 
-// === Care Section  ===
+// === Care Section ===
 const careIconMap = {
-  "wash": "💧",
-  "dry": "🌬️",
-  "avoid": "❌",
-  "recycle": "♻️",
-  "recommend": "👍"
+  wash: "💧",
+  dry: "🌬️",
+  avoid: "❌",
+  recycle: "♻️",
+  recommend: "👍"
 };
 
 function updateCareInstructions(careInstructions, materials) {
@@ -205,36 +211,37 @@ function updateCareInstructions(careInstructions, materials) {
   }
 
   careContainer.innerHTML = "";
-  let majorityFiber = null;
-  for (const fiber in careInstructions) {
-    if (!majorityFiber || (materials[fiber] && materials[fiber].percent > materials[majorityFiber].percent)) {
-      majorityFiber = fiber;
+
+  // find majority fibre key in careInstructions using materials array
+  let majorityKey = null;
+  let maxPercent = -1;
+  for (const mat of materials || []) {
+    if (careInstructions[mat.name] && mat.percent > maxPercent) {
+      majorityKey = mat.name;
+      maxPercent = mat.percent;
     }
   }
+  const fibreKey = majorityKey || Object.keys(careInstructions)[0];
 
-  for (const [key, value] of Object.entries(careInstructions[majorityFiber])) {
+  for (const [key, value] of Object.entries(careInstructions[fibreKey])) {
     const item = document.createElement("div");
-    item.className = "care-item";
-    if (value.note) {
-      item.className = "care-item has-note";
-    }
+    item.className = value.note ? "care-item has-note" : "care-item";
 
     item.dataset.noteTitle = key.charAt(0).toUpperCase() + key.slice(1);
-    item.dataset.noteBody = value.note;
+    item.dataset.noteBody = value.note || "";
 
     item.innerHTML = `
-      <div class="care-icon ${value.style}">${careIconMap[key]}</div>
+      <div class="care-icon ${value.style}">${careIconMap[key] || "ℹ️"}</div>
       <div class="care-label">${value.label}</div>
     `;
     careContainer.appendChild(item);
   }
-  // Re-wire hover listeners for the new .has-note elements
+
   attachHoverNotes();
 }
 
-// === Durability Section  ===
+// === Durability Section ===
 function updateDurabilityScore(durabilityScores, materials) {
-  const lifespanCardEl = document.querySelector(".lifespan-card");
   const lifespanScoreEl = document.querySelector(".lifespan-score");
   const lifespanPillEl = document.querySelector(".lifespan-pill");
   if (!lifespanScoreEl || !lifespanPillEl || !durabilityScores || !materials) {
@@ -242,77 +249,96 @@ function updateDurabilityScore(durabilityScores, materials) {
   }
 
   let score = 0;
-
   let highestMat = null;
   let lowestMat = null;
+
   for (const mat of materials) {
-    const matScore = durabilityScores[mat.name];
+    const matScore = durabilityScores[mat.name] ?? 0;
     score += matScore * (mat.percent / 100);
-    if (!highestMat || matScore > durabilityScores[highestMat.name]) {
+    if (!highestMat || matScore > (durabilityScores[highestMat.name] ?? 0)) {
       highestMat = mat;
     }
-    if (!lowestMat || matScore < durabilityScores[lowestMat.name]) {
+    if (!lowestMat || matScore < (durabilityScores[lowestMat.name] ?? 0)) {
       lowestMat = mat;
     }
   }
 
-  let majorityFiber = getMajorityFiber(materials);
-
   lifespanScoreEl.textContent = score.toFixed(1);
+
   if (score >= 4) {
     lifespanPillEl.textContent = "Long lasting";
     lifespanPillEl.className = "lifespan-pill pill-long";
-
-    // lifespanCardEl.dataset.noteBody += ` This garment consists of high-quality fabrics like ${highestMat.name}, which contribute to its long-lasting durability.`;
   } else if (score >= 2.5) {
     lifespanPillEl.textContent = "Moderate";
     lifespanPillEl.className = "lifespan-pill pill-moderate";
-
-    // lifespanCardEl.dataset.noteBody += ` This garment largely consists of ${majorityFiber}, which has a durability score of ${durabilityScores[majorityFiber]}.`;
   } else {
     lifespanPillEl.textContent = "Short lifespan";
     lifespanPillEl.className = "lifespan-pill pill-short";
-
-    // lifespanCardEl.dataset.noteBody += `This garment contains lower-durability fabrics like ${lowestMat.name}, which may lead to quicker wear and tear with regular use.`;
   }
 }
 
+// ========= DOM READY (tabs + details demo) =========
+document.addEventListener("DOMContentLoaded", () => {
+  // Tabs
+  document
+    .getElementById("tab-fiber")
+    .addEventListener("click", () => showView("view-fiber"));
+  document
+    .getElementById("tab-details")
+    .addEventListener("click", () => showView("view-details"));
+
+  attachHoverNotes();
+
+  // For now, render demo data. Later you'll replace this with data
+  // returned from your OpenAI/backend call.
+  renderDetails(demoDetailsData);
+});
+
+// ========= Popup Initialization: materials + brand =========
 document.addEventListener("DOMContentLoaded", function () {
   console.log("Popup script loaded: sending message to background to get materials");
   chrome.runtime.sendMessage({ action: "getMaterials" }, function (response) {
     console.log("Response received from background:", response);
     if (!response || !Array.isArray(response.materials)) {
       console.log("No parsed materials received");
-      updateFiberFromMaterials([]); // fallback / empty
       return;
     }
 
-    console.log("POPUP: Parsed materials from content script:", response);
+    // Update fiber bar and legend
     updateFiberFromMaterials(response.materials, response.notes);
-    
-    // Now get care instructions
+
     chrome.runtime.sendMessage({ action: "getCareInstructions" }, function (careResponse) {
       console.log("Care instructions response received from background:", careResponse);
-      if (!careResponse) {
-        console.log("No materials received for care instructions");
-        updateCareInstructions([]); // fallback / empty
-        return;
-      }
-
-      console.log("Popup received care instructions from background:", careResponse);
+      if (!careResponse) return;
+      // Update care instructions
       updateCareInstructions(careResponse, response.materials);
     });
 
-    // Now get durability score 
     chrome.runtime.sendMessage({ action: "getDurabilityScores" }, function (durabilityResponse) {
       console.log("Durability scores response received from background:", durabilityResponse);
-      if (!durabilityResponse) {
-        console.log("No materials received for durability scores");
-        return;
-      }
-
-      console.log("Popup received durability scores from background:", durabilityResponse);
+      if (!durabilityResponse) return;
+      // Update durability score
       updateDurabilityScore(durabilityResponse, response.materials);
     });
+  });
+
+  console.log("Getting brand sustainability info");
+  chrome.runtime.sendMessage({ action: "getBrandInfo" }, function (brandResponse) {
+    console.log("Brand info response received from background:", brandResponse);
+    const nameEl = document.getElementById("brand-name");
+    const bodyEl = document.getElementById("brand-sustainability-body");
+
+    if (!brandResponse || !nameEl || !bodyEl) {
+      console.log("No brand info received");
+      return;
+    }
+
+    // Populate brand name and sustainability initiatives
+    if (brandResponse.name) {
+      nameEl.textContent = brandResponse.name;
+    }
+    if (brandResponse.sustainability_initiatives) {
+      bodyEl.textContent = brandResponse.sustainability_initiatives;
+    }
   });
 });

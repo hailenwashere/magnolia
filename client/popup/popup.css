@@ -30,7 +30,6 @@ body {
 }
 
 /* Brand header */
-
 .brand {
   display: flex;
   align-items: center;
@@ -57,7 +56,6 @@ body {
 }
 
 /* Tabs */
-
 .tabs {
   background: #f4f2ff;
   border-radius: 999px;
@@ -87,7 +85,6 @@ body {
 }
 
 /* Views */
-
 .view {
   display: none;
 }
@@ -103,7 +100,7 @@ body {
   color: #3b3566;
 }
 
-/* Composition */
+/* ========= Fibre view ========= */
 
 .composition-wrapper {
   background: #ffffff;
@@ -128,19 +125,15 @@ body {
 .seg-1 {
   background: #2e8cff;
 }
-
 .seg-2 {
   background: #ff62aa;
 }
-
 .seg-3 {
   background: #b26bff;
 }
-
 .seg-4 {
   background: #fecb95;
 }
-
 .seg-5 {
   background: #9ff4cb;
 }
@@ -168,19 +161,15 @@ body {
 .dot-1 {
   background: #2e8cff;
 }
-
 .dot-2 {
   background: #ff62aa;
 }
-
 .dot-3 {
   background: #b26bff;
 }
-
 .dot-4 {
   background: #fecb95;
 }
-
 .dot-5 {
   background: #9ff4cb;
 }
@@ -194,7 +183,6 @@ body {
 }
 
 /* Lifespan */
-
 .lifespan-card {
   margin-top: 14px;
   background: linear-gradient(135deg, #f9f1ff, #f2fffb);
@@ -209,11 +197,6 @@ body {
   align-items: center;
 }
 
-.lifespan-info {
-  display: inline-flex;
-  align-items: center;
-}
-
 .lifespan-icon {
   width: 26px;
   height: 26px;
@@ -224,6 +207,11 @@ body {
   justify-content: center;
   color: #a855f7;
   margin-right: 8px;
+}
+
+.lifespan-info {
+  display: inline-flex;
+  align-items: center;
 }
 
 .lifespan-info-icon {
@@ -279,7 +267,6 @@ body {
 }
 
 /* Care guide */
-
 .care-card {
   margin-top: 14px;
   background: #ffffff;
@@ -346,39 +333,32 @@ body {
 }
 
 /* Hover note panel */
-
 .hover-note {
   position: fixed;
-  bottom: 20px; /* adjust to taste */
-  left: 50%;
-  transform: translateY(10px);
-
   min-width: 260px;
   max-width: 300px;
-  max-height: 120px;        /* cap vertical size */
-  word-wrap: break-word;    /* prevent long words from ruining layout */
-
+  max-height: 120px;
+  word-wrap: break-word;
   background: rgba(31, 41, 55, 0.35);
   backdrop-filter: blur(10px);
   border-radius: 12px;
   padding: 12px;
   box-shadow: 0 6px 30px rgba(0, 0, 0, 0.25);
-
   color: #fff;
   font-size: 12px;
   opacity: 0;
-  pointer-events: none;     /* IMPORTANT — doesn't block hover */
+  pointer-events: none;
   transition:
     opacity 0.25s ease-out,
     transform 0.25s ease-out;
-  z-index: 9999;            /* above everything */
+  transform: translateY(10px);
+  z-index: 9999;
 }
 
 .hover-note.visible {
   opacity: 1;
   transform: translateY(0);
 }
-
 
 .hover-note-title {
   font-weight: 600;
@@ -389,123 +369,124 @@ body {
   line-height: 1.4;
 }
 
-/* Reviews stub */
+/* ========= Details view ========= */
 
-/* ===== Reviews view ===== */
-
-.reviews-card {
+/* Review summary card */
+.summary-card {
   border-radius: 18px;
-  padding: 10px 12px;
-  background: linear-gradient(135deg, #fff9e5, #ffe9cf);
-  box-shadow: 0 10px 24px rgba(245, 158, 11, 0.25);
+  padding: 14px 14px 12px;
+  background: #fef3ff;
+  border: 1px solid #f9d0ff;
+  box-shadow: 0 10px 24px rgba(236, 72, 153, 0.16);
   display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 14px;
+  gap: 16px;
+  margin-bottom: 18px;
 }
 
-.rating-card .rating-stars {
-  font-size: 18px;
-  color: #fbbf24;
+.summary-left {
+  min-width: 80px;
+  text-align: center;
 }
 
-.rating-info {
-  font-size: 12px;
-  color: #4b5563;
-}
-
-.rating-score {
+.summary-rating {
+  font-size: 26px;
   font-weight: 600;
-}
-
-.rating-count {
-  font-size: 11px;
-  opacity: 0.85;
-}
-
-.reviews-subtitle {
-  font-size: 12px;
-  font-weight: 600;
-  color: #5b4c86;
-  margin: 8px 2px 6px;
-}
-
-/* Metrics list */
-
-.metric-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-bottom: 10px;
-}
-
-.metric-row {
-  font-size: 11px;
-}
-
-.metric-top {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 3px;
-  color: #4b5563;
-}
-
-.metric-name {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.metric-emoji {
-  font-size: 13px;
-}
-
-.metric-bar {
-  height: 6px;
-  border-radius: 999px;
-  background: rgba(148, 163, 184, 0.25);
-  overflow: hidden;
-}
-
-.metric-bar-inner {
-  height: 100%;
-  border-radius: inherit;
-  background: linear-gradient(90deg, #22c55e, #16a3ff);
-}
-
-/* Flags */
-
-.flag-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
+  color: #3b3566;
   margin-bottom: 4px;
 }
 
-.flag-card {
-  border-radius: 14px;
-  padding: 8px 9px;
-  font-size: 11px;
-  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.09);
-}
-
-.flag-title {
-  font-weight: 600;
+.summary-stars {
+  font-size: 14px;
+  color: #a855f7;
   margin-bottom: 2px;
 }
 
-.flag-note {
+.summary-count {
+  font-size: 11px;
   color: #6b7280;
 }
 
-/* color variants */
-
-.flag-warn {
-  background: #fff7ed;
-  color: #9a3412;
+.summary-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 12px;
+  color: #4b5563;
 }
 
-.flag-soft {
-  background: #ecfdf3;
+.summary-list li {
+  display: flex;
+  gap: 6px;
+  align-items: flex-start;
+  margin-bottom: 4px;
+}
+
+.summary-bullet {
+  font-size: 12px;
+  color: #a855f7;
+  margin-top: 1px;
+}
+
+/* What this means for you */
+.meaning-card {
+  border-radius: 18px;
+  padding: 12px 14px;
+  background: #e7f1ff;
+  border: 1px solid #c7e0ff;
+  box-shadow: 0 10px 24px rgba(59, 130, 246, 0.12);
+  margin-bottom: 18px;
+}
+
+.meaning-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.meaning-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #4b6cb7;
+  min-width: 72px;
+}
+
+.chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.chip {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  background: #ffffff;
+  color: #1f2933;
+  border: 1px solid rgba(148, 163, 184, 0.5);
+  white-space: nowrap;
+}
+
+/* Brand sustainability */
+.brand-card {
+  border-radius: 18px;
+  padding: 12px 14px;
+  background: #e6f9ea;
+  border: 1px solid #a7f3c2;
+  box-shadow: 0 10px 24px rgba(34, 197, 94, 0.14);
+}
+
+.brand-title {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 4px;
   color: #166534;
+}
+
+.brand-body {
+  font-size: 12px;
+  line-height: 1.45;
+  color: #14532d;
 }
