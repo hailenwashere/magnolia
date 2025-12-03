@@ -11,7 +11,7 @@ The frontend for this project is a Chrome extension. While this extension isn't 
 
 Clicking on the extension icon for magnolia will popup the extension, which shows insights on fabric composition, care instructions, and red flags in reviews for users to make a more educated decision on the shopping options.
 
-Disclaimer: As of right now, the extension is populated with static dummy data that simulates what would pop up on a listing of choice. The data does not accurately represent the active tab, but will by the end of week 9.
+Disclaimer: As of right now, the details page of the extension is populated with static dummy data that simulates what would pop up on a listing of choice. 
 
 <!-- ### Server
 Make sure you can copy paste the connection URL from supabase. You can hit Connect at the top, copy the connection URL, replace `YOUR_PASSWORD` in the URL with the database password, and paste it into `/server/.env`. Your .env file should look something like this:
