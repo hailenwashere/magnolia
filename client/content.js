@@ -17,8 +17,7 @@ const baseFibers = [
   "spandex",
   "hemp",
   "lyocell",
-  "polyamide",
-  "elastane"
+  "polyamide"
 ];
 
 function normalizeFiberName(name) {
@@ -26,15 +25,13 @@ function normalizeFiberName(name) {
   return n;
 }
 
-// Match things like:
-//  "53% Rayon"
-//  "24% Polyester"
-//  "57% Regeneratively Grown Cotton"
-//  "43% TENCEL™ Lyocell"
-//
-// Stops at comma, " and ", period, semicolon, or end of string.
+// Very simple % + word(s) matcher.
+// Example matches:
+//  59% polyamide
+//  23% viscose
+//  3% elastane
 const segmentRegex =
-  /(\d+)\s*%\s*([A-Za-z][A-Za-z\s-™]*?)(?=(?:,|\band\b|\.|;|\n|$))/gi;
+  /(\d+)\s*%\s*([A-Za-z]+(?:\s+[A-Za-z]+)*)/g;
 
 function extractMaterialsFromText(text) {
   const result = [];
@@ -43,58 +40,74 @@ function extractMaterialsFromText(text) {
   let match;
   while ((match = segmentRegex.exec(text)) !== null) {
     const percent = parseInt(match[1], 10);
+    let rawName = match[2].trim();
+
     if (isNaN(percent)) continue;
 
-    let rawName = match[2].trim().replace(/\s+/g, " ");
-    const lower = rawName.toLowerCase();
+    // Normalize: lowercase, remove TM / R, compress spaces
+    let lower = rawName.toLowerCase().replace(/[™®]/g, "").replace(/\s+/g, " ");
 
-    // Only keep if it looks like a real fiber (contains a base-fiber word)
+    // Map common synonyms
+    if (lower.includes("spandex")) lower = "elastane";
+    if (lower.includes("polyamide")) lower = "polyamide";
+
+    // Keep only if it contains any base fiber word
     const isFiber = baseFibers.some(word => lower.includes(word));
-    if (!isFiber) continue;
+    if (!isFiber) {
+      continue;
+    }
 
-    // Trim rawName to end at the first base-fiber keyword
-    let cleanedName = rawName;
-    let baseFiber = ""
-
+    // Find the first base fiber that appears and trim to that word
+    let baseFiber = lower;
     for (const word of baseFibers) {
-      const idx = cleanedName.toLowerCase().indexOf(word);
+      const idx = lower.indexOf(word);
       if (idx !== -1) {
-        cleanedName = cleanedName.slice(0, idx + word.length);
         baseFiber = word;
+        lower = lower.slice(0, idx + word.length);
         break;
       }
     }
 
-    cleanedName = cleanedName.trim();
-    cleanedName = normalizeFiberName(cleanedName);
+    const cleanedName = lower.trim();
 
-    if (!cleanedName) continue;
-
-    if (!result.some(m => m.name === cleanedName && m.percent === percent)) {
-      result.push({ percent, name: cleanedName, baseFiber: baseFiber });
+    const existing = result.find(m => m.name === cleanedName);
+    if (!existing) {
+      result.push({ percent, name: cleanedName, baseFiber });
+    } else if (percent > existing.percent) {
+      existing.percent = percent;
     }
   }
 
   return result;
 }
 
+
 function checkDOM() {
   materials = [];
   console.log("🌸 Magnolia: checking DOM for materials information");
 
   const allElements = document.querySelectorAll("body *");
+
   for (const el of allElements) {
     const text = el.innerText;
     if (!text) continue;
 
     const found = extractMaterialsFromText(text);
     if (found.length) {
-      materials = found;
-      console.log("🌸 Magnolia: Final parsed materials:", materials);
-      break;
+      for (const m of found) {
+        const existing = materials.find(x => x.name === m.name);
+        if (!existing) {
+          materials.push(m);
+        } else if (m.percent > existing.percent) {
+          existing.percent = m.percent;
+        }
+      }
     }
   }
+
+  console.log("🌸 Magnolia: Final parsed materials:", materials);
 }
+
 
 // Run once after page loads to warm cache
 window.addEventListener("load", checkDOM);

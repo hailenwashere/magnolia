@@ -135,7 +135,7 @@ body {
   background: #fecb95;
 }
 .seg-5 {
-  background: #9ff4cb;
+  background: #88bda4;
 }
 
 .composition-legend {
@@ -171,7 +171,7 @@ body {
   background: #fecb95;
 }
 .dot-5 {
-  background: #9ff4cb;
+  background: #88bda4;
 }
 
 .legend-label {
@@ -326,6 +326,11 @@ body {
 .care-icon.green {
   background: #dcfce7;
   color: #16a34a;
+}
+
+.care-icon.gray {
+  background: #cacaca;
+  color: #364777;
 }
 
 .care-label {
