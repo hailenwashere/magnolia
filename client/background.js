@@ -110,7 +110,6 @@ async function fetchCareInstructions(materials) {
     return careInstructions;
 }
 
-
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.action === 'getCareInstructions') {
         console.log("Background script received getCareInstructions message from popup");
@@ -124,6 +123,59 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             sendResponse(careInstructions);
         }).catch((error) => {
             console.error("Error fetching care instructions:", error);
+            sendResponse(null);
+        });
+
+        // Keep the message channel open for the async sendResponse above
+        return true;
+    }
+});
+
+async function fetchDurabilityScores(materials) {
+    const fiberNames = materials.map((m) => m.name);
+    const durabilityScores = {};
+    for (const name of fiberNames) {
+        console.log("Fetching durability score for fiber:", name);
+
+        const response = await fetch(
+            `${SUPABASE_URL}/rest/v1/fabric?select=durability&type=eq.${encodeURIComponent(name)}`,
+            {
+                method: 'GET',
+                headers: {
+                    apikey: SUPABASE_PUBLISHABLE_KEY,
+                    Authorization: `Bearer ${SUPABASE_PUBLISHABLE_KEY}`,
+                    'Content-Type': 'application/json',
+                    Prefer: 'return=representation'
+                }
+            }
+        );
+        
+        console.log(`BACKGROUND: Response for ${name}:`, response);
+        if (!response.ok) {
+            throw new Error(`Error fetching durability score for ${name}: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        console.log(`BACKGROUND: Durability score data for ${name}:`, data);
+        durabilityScores[name] = data[0]?.durability || null;
+    }
+
+    return durabilityScores;
+}
+
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    if (message.action === 'getDurabilityScores') {
+        console.log("Background script received getDurabilityScores message from popup");
+        if (!materials || !materials.length) {
+            console.log("No materials cached in background script");
+            sendResponse(null);
+            return;
+        }
+
+        fetchDurabilityScores(materials).then((durabilityScores) => {
+            sendResponse(durabilityScores);
+        }).catch((error) => {
+            console.error("Error fetching durability scores:", error);
             sendResponse(null);
         });
 

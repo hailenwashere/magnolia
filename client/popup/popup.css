@@ -209,6 +209,11 @@ body {
   align-items: center;
 }
 
+.lifespan-info {
+  display: inline-flex;
+  align-items: center;
+}
+
 .lifespan-icon {
   width: 26px;
   height: 26px;
@@ -219,6 +224,19 @@ body {
   justify-content: center;
   color: #a855f7;
   margin-right: 8px;
+}
+
+.lifespan-info-icon {
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  border: 1px solid #d8b4fe;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #a855f7;
+  font-size: 10px;
+  margin-left: 8px;
 }
 
 .lifespan-text {
@@ -232,7 +250,7 @@ body {
   color: #a855f7;
 }
 
-.lifespan-years {
+.lifespan-score {
   font-size: 15px;
   font-weight: 600;
   color: #382f63;
@@ -242,9 +260,22 @@ body {
   font-size: 11px;
   padding: 4px 10px;
   border-radius: 999px;
+  font-weight: 500;
+}
+
+.pill-long {
   background: #d1fae5;
   color: #047857;
-  font-weight: 500;
+}
+
+.pill-moderate {
+  background: #ffedd7;
+  color: #9c7038;
+}
+
+.pill-short {
+  background: #fee2e2;
+  color: #b91c1c;
 }
 
 /* Care guide */
@@ -325,7 +356,6 @@ body {
   min-width: 260px;
   max-width: 300px;
   max-height: 120px;        /* cap vertical size */
-  overflow-y: auto;         /* allow scrolling instead of expanding */
   word-wrap: break-word;    /* prevent long words from ruining layout */
 
   background: rgba(31, 41, 55, 0.35);

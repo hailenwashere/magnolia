@@ -127,54 +127,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 // === Materials Section  ===
+function getMajorityFiber(materials) {
+  if (!materials || !materials.length) return null;
 
-const baseFibers = [
-  "cotton",
-  "cashmere",
-  "rayon",
-  "polyester",
-  "nylon",
-  "linen",
-  "silk",
-  "wool",
-  "viscose",
-  "modal",
-  "acrylic",
-  "elastane",
-  "spandex",
-  "hemp",
-  "lyocell",
-  "polyamide",
-  "elastane"
-];
-
-// Map from fiber name → hover note text (optional)
-const fiberNotes = {
-  cotton: {
-    title: "Cotton",
-    body: "Natural, breathable, comfortable. Can shrink and is resource-intensive to grow."
-  },
-  "recycled polyester": {
-    title: "Recycled polyester",
-    body: "Durable synthetic made from recycled plastic. Reduces waste but can shed microplastics."
-  },
-  polyester: {
-    title: "Polyester",
-    body: "Very durable and wrinkle-resistant, but not very breathable and can pill over time."
-  },
-  rayon: {
-    title: "Rayon",
-    body: "Soft and drapey semi-synthetic, but production can be chemically intensive."
-  },
-  wool: {
-    title: "Wool",
-    body: "Warm, odor-resistant natural fiber. Can felt/shrink if washed hot or agitated."
-  },
-  spandex: {
-    title: "Spandex / Elastane",
-    body: "Adds stretch and recovery. Can lose elasticity with heat or harsh washing."
+  let majority = materials[0];
+  for (const mat of materials) {
+    if (mat.percent > majority.percent) {
+      majority = mat;
+    }
   }
-};
+  return majority.name;
+} 
+
+const plantIcons = [
+  "🌿", "🍃", "🌱", "🌾", "🍀"
+]
 
 // == Materials Bar Rendering ==
 function updateFiberFromMaterials(materials, notes) {
@@ -204,7 +171,7 @@ function updateFiberFromMaterials(materials, notes) {
 
 
     const materialName = mat.name.replace(/\b\w/g, char => char.toUpperCase());
-    item.dataset.noteTitle = materialName
+    item.dataset.noteTitle = `${plantIcons[index]} ` + materialName
     item.dataset.noteBody = notes[mat.name]
       ? notes[mat.name].environmental_impact_desc
       : `${mat.percent}% ${materialName}`;
@@ -222,42 +189,7 @@ function updateFiberFromMaterials(materials, notes) {
   attachHoverNotes();
 }
 
-// Machine wash cold, Air-dry recommended, otherwise tumble dry low.
-// careInstructions = {"wash": "Machine wash cold", "dry": "Air-dry recommended, otherwise tumble dry low", "note": ""};
-{/* <div class="care-item has-note" data-note-title="Wash"
-    data-note-body="Best choice — preserves energy and helps prevent shrinking or color fading.">
-    <div class="care-icon cold">💧</div>
-    <div class="care-label">Cold</div>
-</div> */}
-
-const careInstructionsExample = {
-  "wash": {
-    "note": "Machine wash cold",
-    "label": "Cold",
-    "style": "blue"
-  },
-  "dry": {
-    "note": "Air-dry recommended, otherwise tumble dry low",
-    "label": "Low",
-    "style": "yellow"
-  },
-  "avoid": {
-    "note": "Avoid bleach",
-    "label": "No bleach",
-    "style": "red"
-  },
-  "recycle": {
-    "note": "Recycle garment where possible",
-    "label": "Recycle",
-    "style": "green"
-  },
-  "recommend": {
-    "note": "Recommended by Magnolia for its sustainability",
-    "label": "Recommended",
-    "style": "green"
-  }
-};
-
+// === Care Section  ===
 const careIconMap = {
   "wash": "💧",
   "dry": "🌬️",
@@ -266,7 +198,6 @@ const careIconMap = {
   "recommend": "👍"
 };
 
-// === Care Section  ===
 function updateCareInstructions(careInstructions, materials) {
   const careContainer = document.querySelector(".care-row");
   if (!careContainer || !careInstructions || !Object.keys(careInstructions).length) {
@@ -301,6 +232,51 @@ function updateCareInstructions(careInstructions, materials) {
   attachHoverNotes();
 }
 
+// === Durability Section  ===
+function updateDurabilityScore(durabilityScores, materials) {
+  const lifespanCardEl = document.querySelector(".lifespan-card");
+  const lifespanScoreEl = document.querySelector(".lifespan-score");
+  const lifespanPillEl = document.querySelector(".lifespan-pill");
+  if (!lifespanScoreEl || !lifespanPillEl || !durabilityScores || !materials) {
+    return;
+  }
+
+  let score = 0;
+
+  let highestMat = null;
+  let lowestMat = null;
+  for (const mat of materials) {
+    const matScore = durabilityScores[mat.name];
+    score += matScore * (mat.percent / 100);
+    if (!highestMat || matScore > durabilityScores[highestMat.name]) {
+      highestMat = mat;
+    }
+    if (!lowestMat || matScore < durabilityScores[lowestMat.name]) {
+      lowestMat = mat;
+    }
+  }
+
+  let majorityFiber = getMajorityFiber(materials);
+
+  lifespanScoreEl.textContent = score.toFixed(1);
+  if (score >= 4) {
+    lifespanPillEl.textContent = "Long lasting";
+    lifespanPillEl.className = "lifespan-pill pill-long";
+
+    // lifespanCardEl.dataset.noteBody += ` This garment consists of high-quality fabrics like ${highestMat.name}, which contribute to its long-lasting durability.`;
+  } else if (score >= 2.5) {
+    lifespanPillEl.textContent = "Moderate";
+    lifespanPillEl.className = "lifespan-pill pill-moderate";
+
+    // lifespanCardEl.dataset.noteBody += ` This garment largely consists of ${majorityFiber}, which has a durability score of ${durabilityScores[majorityFiber]}.`;
+  } else {
+    lifespanPillEl.textContent = "Short lifespan";
+    lifespanPillEl.className = "lifespan-pill pill-short";
+
+    // lifespanCardEl.dataset.noteBody += `This garment contains lower-durability fabrics like ${lowestMat.name}, which may lead to quicker wear and tear with regular use.`;
+  }
+}
+
 document.addEventListener("DOMContentLoaded", function () {
   console.log("Popup script loaded: sending message to background to get materials");
   chrome.runtime.sendMessage({ action: "getMaterials" }, function (response) {
@@ -326,8 +302,17 @@ document.addEventListener("DOMContentLoaded", function () {
       console.log("Popup received care instructions from background:", careResponse);
       updateCareInstructions(careResponse, response.materials);
     });
+
+    // Now get durability score 
+    chrome.runtime.sendMessage({ action: "getDurabilityScores" }, function (durabilityResponse) {
+      console.log("Durability scores response received from background:", durabilityResponse);
+      if (!durabilityResponse) {
+        console.log("No materials received for durability scores");
+        return;
+      }
+
+      console.log("Popup received durability scores from background:", durabilityResponse);
+      updateDurabilityScore(durabilityResponse, response.materials);
+    });
   });
 });
-
-
-
