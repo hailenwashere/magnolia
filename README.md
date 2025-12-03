@@ -1,5 +1,6 @@
 # magnolia
 a lightweight chrome extension that helps shoppers make smarter decisions about their clothes
+![magnolia-logo](images/magnolia-logo.png))
 
 
 ## Setup
