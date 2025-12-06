@@ -2,9 +2,8 @@
 a lightweight chrome extension that helps shoppers make smarter decisions about their clothes
 ![magnolia-logo](images/magnolia-logo.png))
 
+<img src="images/magnolia-logo.png" alt="magnolia-logo" width="200"/>
 
-## Setup
-This project contains two main directories: /client and /server.
 
 ## Client
 The frontend for this project is a Chrome extension. While this extension isn't deployed yet, you can upload it onto Chrome developer tools yourself to test out the project. To do this, go to chrome://extensions and toggle Developer Mode. Then, click Load Unpacked and select the client directory in this project. You should be able to see a new extension named magnolia in your browser. You can pin the extension by clicking the puzzle piece icon in the top right of your Chrome browser, and clicking the pin icon on magnolia.
