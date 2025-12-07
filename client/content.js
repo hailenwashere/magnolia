@@ -231,3 +231,12 @@ function findReviewContainer() {
   return bestContainer;
 }
 
+
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.action === "scrapePageForReviews") {
+    console.log("🌸 Magnolia: Content script received scrapePageForReviews message from background");
+    const container = findReviewContainer();
+    sendResponse({ containerHTML: container ? container.innerHTML : null });
+    return true;
+  }
+});

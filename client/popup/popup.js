@@ -344,4 +344,19 @@ document.addEventListener("DOMContentLoaded", function () {
       bodyEl.textContent = brandResponse.sustainability_initiatives;
     }
   });
+
+  console.log("Getting item details");
+  chrome.runtime.sendMessage({ action: "getItemDetails" }, function (itemResponse) {
+    console.log("Item details response received from background:", itemResponse);
+
+    if (!itemResponse || !bodyEl) {
+      console.log("No item details received");
+      return;
+    }
+
+    // Populate item details
+    if (itemResponse.details) {
+      renderDetails(itemResponse.details);
+    }
+  });
 });

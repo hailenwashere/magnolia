@@ -320,3 +320,76 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     return true; // Keep message channel open
   }
 });
+
+// analyze reviews container
+async function fetchReviewAnalysis(containerHTML) {
+  const response = await fetch(
+    `${SUPABASE_URL}/functions/v1/analyze-reviews`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        apikey: SUPABASE_PUBLISHABLE_KEY,
+      },
+      body: JSON.stringify({
+        html: containerHTML,
+      })
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error(`Error fetching review analysis: ${response.statusText}`);
+  }
+
+  console.log("BACKGROUND: Review analysis response:", response);
+
+  // return response.json();
+}
+
+// getItemDetails handler
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.action === 'getItemDetails') {
+    console.log("BACKGROUND: getItemDetails");
+
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      if (!tabs.length) {
+        console.warn("No active tab found");
+        sendResponse({ materials: null, error: "No active tab" });
+        return;
+      }
+
+      const tabId = tabs[0].id;
+
+      chrome.tabs.sendMessage(
+        tabId,
+        { action: 'scrapePageForReviews' },
+        async (response) => {
+          if (chrome.runtime.lastError) {
+            console.warn("tabs.sendMessage error:", chrome.runtime.lastError.message);
+            sendResponse({ materials: null, error: chrome.runtime.lastError.message });
+            return;
+          }
+
+          console.log("BACKGROUND: Received item details from content script:", response.containerHTML);
+
+          // ask open ai for analysis
+          //  analysis in format
+          // * details = {
+          //  *   rating: number,
+          //  *   reviewCount: number,
+          //  *   summaryNotes: string[],   // 2–4 bullet points
+          //  *   bestFor: string[],        // chips
+          //  *   avoidIf: string[]         // chips
+          //  * }
+
+          // sendResponse({
+          //   details: response.details
+          // });
+        }
+      );
+    });
+
+    // Keep the message channel open for the async sendResponse above
+    return true;
+  }
+});
