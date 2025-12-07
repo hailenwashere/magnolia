@@ -345,18 +345,18 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  console.log("Getting item details");
-  chrome.runtime.sendMessage({ action: "getItemDetails" }, function (itemResponse) {
-    console.log("Item details response received from background:", itemResponse);
+  // console.log("Getting item details");
+  // chrome.runtime.sendMessage({ action: "getItemDetails" }, function (itemResponse) {
+  //   console.log("Item details response received from background:", itemResponse);
 
-    if (!itemResponse || !bodyEl) {
-      console.log("No item details received");
-      return;
-    }
+  //   if (!itemResponse || !bodyEl) {
+  //     console.log("No item details received");
+  //     return;
+  //   }
 
-    // Populate item details
-    if (itemResponse.details) {
-      renderDetails(itemResponse.details);
-    }
-  });
+  //   // Populate item details
+  //   if (itemResponse.details) {
+  //     renderDetails(itemResponse.details);
+  //   }
+  // });
 });
