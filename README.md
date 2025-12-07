@@ -11,6 +11,16 @@ Clicking on the extension icon for magnolia will popup the extension, which show
 
 Disclaimer: As of right now, the some sections of the details page of the extension are populated with static dummy data that simulates what would pop up on a listing of choice. 
 
+In order to upload to the Chrome Web Store, we reduced the scope of the permissions to the following URL patterns (as seen in the manifest.json). Until there is more time to refactor and improve, this extension will only render for the URLs included.
+```
+"https://*.uniqlo.com/*",
+"https://*.hm.com/*",
+"https://*.gap.com/*",
+"https://*.oldnavy.com/*",
+"https://*.aritzia.com/*",
+"https://*.thereformation.com/*"
+```
+
 <!-- ### Server
 Make sure you can copy paste the connection URL from supabase. You can hit Connect at the top, copy the connection URL, replace `YOUR_PASSWORD` in the URL with the database password, and paste it into `/server/.env`. Your .env file should look something like this:
 ```
