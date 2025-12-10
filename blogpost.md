@@ -329,7 +329,7 @@ As with any project, there were also shortcomings that left room for Magnolia to
 
 - Unclear Iconography: Users pointed out that at first glance, some icons contradicted the information that the extension displayed. For example, all materials in the fibre breakdown section have a plant icon next to their name in the popup note to signify that it is a material in clothing. However, the icon gives users a false impression that acrylic, a particularly environmentally harmful material found in clothing, is environmentally friendly. 
 
-![][image14]
+<img src="images/badnote.png" alt="Misleading iconography" width="400"/>
 
 - Unintuitive Language: Users also pointed out that there might be some elements of language that can be tweaked. An example is under the reviews tab, having “Avoid if” gives double negative language, which might be harder to understand at first glance as opposed to “Red Flags”, or a section color coding the sentiments regarding key points reviewers have pointed out. 
 
